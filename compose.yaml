@@ -1,10 +1,15 @@
 services:
   app:
     restart: unless-stopped
-    # domainname: mydomain.com # if you want to use your own domain
+    domainname: demo.cloudjam.xyz
     build:
       context: ./app
       dockerfile: Dockerfile
+    #environment:
+    networks:
+      default:
+        aliases:
+          - www.cloudjam.xyz
 
     ports:
       - target: 3000
@@ -13,9 +18,9 @@ services:
 
     healthcheck:
       test: wget -q --spider http://localhost:3000/ || exit 1
+      interval: 10s
 
     deploy:
       resources:
         reservations:
           cpus: '0.50'
-          memory: 512M
